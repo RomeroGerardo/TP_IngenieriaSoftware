@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>EduFlow</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+</head>
+<body>
+
+  <!-- ===================== SCREEN: HOME ===================== -->
+  <div class="screen active" id="s-home">
+    <div class="hero">
+      <div class="hero-logo">EduFlow</div>
+      <p class="hero-sub">Plataforma de aprendizaje online. Elegí cómo querés ingresar.</p>
+      <div class="hero-btns">
+        <button class="btn-purple btn-lg" onclick="show('s-prof-login')">
+          <i class="ti ti-school" aria-hidden="true"></i> Soy Profesor
+        </button>
+        <button class="btn-outline btn-lg" onclick="show('s-alum-login')">
+          <i class="ti ti-user-graduate" aria-hidden="true"></i> Soy Alumno
+        </button>
+      </div>
+      <p class="hero-note">¿Sos profesor? Tu acceso es habilitado por el administrador.</p>
+    </div>
+  </div>
+
+  <!-- ===================== SCREEN: PROFESOR LOGIN ===================== -->
+  <div class="screen" id="s-prof-login">
+    <div class="auth-wrapper">
+      <button class="btn-back" onclick="show('s-home')">
+        <i class="ti ti-arrow-left" aria-hidden="true"></i> Volver
+      </button>
+      <div class="card auth-card">
+        <div class="auth-header">
+          <div class="auth-icon"><i class="ti ti-school" aria-hidden="true"></i></div>
+          <div>
+            <div class="auth-title">Acceso Profesor</div>
+            <div class="auth-sub">Credenciales asignadas por el administrador</div>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="label">Usuario</label>
+          <input class="input-field" id="p-user" type="text" placeholder="usuario@eduflow.com">
+        </div>
+        <div class="form-group">
+          <label class="label">Contraseña</label>
+          <input class="input-field" id="p-pass" type="password" placeholder="••••••••">
+        </div>
+        <div id="p-err" class="error-msg"></div>
+        <button class="btn-purple btn-full" onclick="loginProf()">Iniciar sesión</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===================== SCREEN: ALUMNO LOGIN/REGISTRO ===================== -->
+  <div class="screen" id="s-alum-login">
+    <div class="auth-wrapper">
+      <button class="btn-back" onclick="show('s-home')">
+        <i class="ti ti-arrow-left" aria-hidden="true"></i> Volver
+      </button>
+      <div class="card auth-card">
+        <div class="tabs">
+          <button id="tab-login" class="tab active" onclick="switchTab('login')">Iniciar sesión</button>
+          <button id="tab-reg" class="tab" onclick="switchTab('reg')">Registrarse</button>
+        </div>
+
+        <!-- LOGIN -->
+        <div id="form-login">
+          <div class="form-group">
+            <label class="label">Correo electrónico</label>
+            <input class="input-field" id="a-email" type="email" placeholder="correo@ejemplo.com">
+          </div>
+          <div class="form-group">
+            <label class="label">Contraseña</label>
+            <input class="input-field" id="a-pass" type="password" placeholder="••••••••">
+          </div>
+          <div id="a-err" class="error-msg"></div>
+          <button class="btn-purple btn-full" onclick="loginAlum()">Iniciar sesión</button>
+        </div>
+
+        <!-- REGISTRO -->
+        <div id="form-reg" style="display:none;">
+          <div class="form-grid-2">
+            <div class="form-group">
+              <label class="label">Nombre</label>
+              <input class="input-field" id="r-nombre" type="text" placeholder="Juan">
+            </div>
+            <div class="form-group">
+              <label class="label">Apellido</label>
+              <input class="input-field" id="r-apellido" type="text" placeholder="García">
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="label">Correo electrónico</label>
+            <input class="input-field" id="r-email" type="email" placeholder="correo@ejemplo.com">
+          </div>
+          <div class="form-grid-2">
+            <div class="form-group">
+              <label class="label">Edad</label>
+              <input class="input-field" id="r-edad" type="number" placeholder="25" min="10" max="99">
+            </div>
+            <div class="form-group">
+              <label class="label">Nivel académico</label>
+              <select class="input-field" id="r-nivel">
+                <option value="">Seleccionar...</option>
+                <option>Secundario</option>
+                <option>Universitario</option>
+                <option>Posgrado</option>
+                <option>Otro</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="label">Contraseña</label>
+            <input class="input-field" id="r-pass" type="password" placeholder="••••••••">
+          </div>
+          <div id="r-err" class="error-msg"></div>
+          <button class="btn-purple btn-full" onclick="registrar()">Crear cuenta</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===================== SCREEN: DASHBOARD PROFESOR ===================== -->
+  <div class="screen" id="s-prof-dash">
+    <nav class="nav">
+      <div class="nav-logo">EduFlow</div>
+      <div class="nav-btns">
+        <button class="nav-btn active" id="nav-mis" onclick="profNav('mis')">
+          <i class="ti ti-layout-grid" aria-hidden="true"></i> Mis cursos
+        </button>
+        <button class="nav-btn" id="nav-add" onclick="profNav('add')">
+          <i class="ti ti-plus" aria-hidden="true"></i> Agregar curso
+        </button>
+        <button class="nav-btn" id="nav-stats" onclick="profNav('stats')">
+          <i class="ti ti-chart-bar" aria-hidden="true"></i> Estadísticas
+        </button>
+        <button class="nav-btn logout" onclick="logout()">
+          <i class="ti ti-logout" aria-hidden="true"></i> Salir
+        </button>
+      </div>
+    </nav>
+    <div class="dashboard-body">
+
+      <!-- Mis cursos -->
+      <div id="pv-mis">
+        <div class="section-header">
+          <div>
+            <div class="section-title">Mis cursos</div>
+            <div class="section-sub">Gestioná tu contenido educativo</div>
+          </div>
+        </div>
+        <div id="prof-cursos-list" class="card-grid"></div>
+      </div>
+
+      <!-- Agregar curso -->
+      <div id="pv-add" style="display:none;">
+        <div class="section-title" style="margin-bottom:24px;">
+          <i class="ti ti-plus-circle" style="color:var(--purple); margin-right:8px;" aria-hidden="true"></i>Nuevo curso
+        </div>
+        <div class="card form-card">
+          <div class="form-group">
+            <label class="label">Nombre del curso</label>
+            <input class="input-field" id="nc-nombre" type="text" placeholder="ej: Introducción a Python">
+          </div>
+          <div class="form-group">
+            <label class="label">Descripción</label>
+            <textarea class="input-field" id="nc-desc" rows="3" placeholder="Describí brevemente el curso..."></textarea>
+          </div>
+          <div class="form-group">
+            <label class="label">Imagen principal (URL)</label>
+            <input class="input-field" id="nc-img" type="text" placeholder="https://... o dejá vacío para imagen por defecto">
+          </div>
+          <div class="form-group">
+            <label class="label">Video del curso (URL)</label>
+            <input class="input-field" id="nc-video" type="text" placeholder="https://youtube.com/...">
+          </div>
+          <div class="form-group">
+            <label class="label">Archivos adjuntos <span class="label-opt">(opcional, separados por coma)</span></label>
+            <input class="input-field" id="nc-arch" type="text" placeholder="guia.pdf, ejercicios.zip">
+          </div>
+          <div id="nc-err" class="error-msg"></div>
+          <button class="btn-purple btn-full" onclick="agregarCurso()">
+            <i class="ti ti-device-floppy" aria-hidden="true"></i> Guardar curso
+          </button>
+        </div>
+      </div>
+
+      <!-- Estadísticas -->
+      <div id="pv-stats" style="display:none;">
+        <div class="section-title" style="margin-bottom:24px;">
+          <i class="ti ti-chart-bar" style="color:var(--purple); margin-right:8px;" aria-hidden="true"></i>Estadísticas
+        </div>
+        <div id="stats-grid" class="stats-grid"></div>
+        <div id="stats-detalle"></div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ===================== SCREEN: DASHBOARD ALUMNO ===================== -->
+  <div class="screen" id="s-alum-dash">
+    <nav class="nav">
+      <div class="nav-logo">EduFlow</div>
+      <div class="nav-btns">
+        <button class="nav-btn active" id="nav-cat" onclick="alumNav('cat')">
+          <i class="ti ti-books" aria-hidden="true"></i> Catálogo
+        </button>
+        <button class="nav-btn" id="nav-mis-c" onclick="alumNav('mis')">
+          <i class="ti ti-star" aria-hidden="true"></i> Mis cursos
+        </button>
+        <div class="avatar" id="alum-avatar">A</div>
+        <button class="nav-btn logout" onclick="logout()">
+          <i class="ti ti-logout" aria-hidden="true"></i> Salir
+        </button>
+      </div>
+    </nav>
+    <div class="dashboard-body">
+      <div id="av-cat">
+        <div class="section-header">
+          <div class="section-title">Catálogo de cursos</div>
+          <div class="section-sub">Explorá todo el contenido disponible</div>
+        </div>
+        <div id="alum-cursos-grid" class="card-grid"></div>
+      </div>
+      <div id="av-mis" style="display:none;">
+        <div class="section-title" style="margin-bottom:24px;">
+          <i class="ti ti-star" style="color:var(--purple); margin-right:8px;" aria-hidden="true"></i>Mis cursos
+        </div>
+        <div id="mis-inscriptos" class="card-grid"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===================== SCREEN: DETALLE CURSO ===================== -->
+  <div class="screen" id="s-curso-detalle">
+    <nav class="nav">
+      <div class="nav-logo">EduFlow</div>
+      <div class="nav-btns">
+        <button class="nav-btn" onclick="alumNav('cat'); show('s-alum-dash');">
+          <i class="ti ti-arrow-left" aria-hidden="true"></i> Volver
+        </button>
+        <button class="nav-btn logout" onclick="logout()">
+          <i class="ti ti-logout" aria-hidden="true"></i> Salir
+        </button>
+      </div>
+    </nav>
+    <div class="dashboard-body" id="detalle-content"></div>
+  </div>
+
+  <script src="js/data.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
